@@ -38,14 +38,16 @@ class ApiClient {
 
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`
-    const headers: HeadersInit = {
+    // Build headers as a plain object to avoid HeadersInit index typing issues
+    const baseHeaders: Record<string, string> = {
       "Content-Type": "application/json",
-      ...options.headers,
+      ...(options.headers as Record<string, string> | undefined),
     }
 
     if (this.token) {
-      headers.Authorization = `Bearer ${this.token}`
+      baseHeaders["Authorization"] = `Bearer ${this.token}`
     }
+    const headers: HeadersInit = baseHeaders
 
     console.log(`[v0] API Request: ${options.method || "GET"} ${url}`)
 
@@ -79,6 +81,28 @@ class ApiClient {
       body: JSON.stringify({ phone_number: phoneNumber, code, device_id: deviceId }),
     })
     this.setToken(response.token)
+    return response
+  }
+
+  // Traditional email/phone + password auth (bypass OTP if desired)
+  async login(identifier: string, password: string) {
+    const response = await this.request<{ token: string }>("/api/v1/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ identifier, password }),
+    })
+    this.setToken(response.token)
+    return response
+  }
+
+  async signup(data: { name?: string; identifier: string; password: string; restaurant_name?: string }) {
+    const response = await this.request<any>("/api/v1/auth/signup", {
+      method: "POST",
+      body: JSON.stringify(data),
+    })
+    // If backend returns token on signup, set it
+    if (response?.token) {
+      this.setToken(response.token)
+    }
     return response
   }
 

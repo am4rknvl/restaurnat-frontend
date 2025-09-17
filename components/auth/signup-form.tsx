@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardHeader } from "@/components/ui/card"
 import { useRouter } from "next/navigation"
+import { useAuth } from "@/hooks/use-auth"
 import { Eye, EyeOff } from "lucide-react"
 
 export function SignupForm() {
@@ -22,16 +23,19 @@ export function SignupForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  const { signup, isLoading: authLoading, error } = useAuth() as any
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-
-    // Simulate account creation
-    setTimeout(() => {
-      setIsLoading(false)
+    try {
+      await signup({ name: formData.name, identifier: formData.email, password: formData.password, restaurantName: formData.restaurantName })
       router.push("/app")
-    }, 1000)
+    } catch (err) {
+      // error handled by context
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleInputChange = (field: string, value: string) => {

@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/navbar"
 import { HeroSection } from "@/components/hero-section"
 import { FeaturesSection } from "@/components/features-section"
+import { PartnerFeed } from "@/components/partner-feed"
 import { PricingSection } from "@/components/pricing-section"
 import { Footer } from "@/components/footer"
 import ScrollTriggered from "@/components/scroll-triggered"
@@ -10,8 +11,9 @@ export default function HomePage() {
     <div className="min-h-screen">
       <Navbar />
       <main>
-        <HeroSection />
-        <ScrollTriggered />
+  <HeroSection />
+  <PartnerFeed />
+  <ScrollTriggered />
         <FeaturesSection />
         <PricingSection />
       </main>

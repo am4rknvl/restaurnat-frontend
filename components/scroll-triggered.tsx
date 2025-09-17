@@ -5,21 +5,22 @@ import * as React from "react"
 export default function ScrollTriggered() {
   return (
     <div style={container}>
-      {food.map(([emoji, hueA, hueB], i) => (
-        <Card i={i} emoji={emoji} hueA={hueA} hueB={hueB} key={`${emoji}-${i}`} />
+      {food.map(([img, title, hueA, hueB], i) => (
+        <Card i={i} image={img} title={title} hueA={hueA} hueB={hueB} key={`${title}-${i}`} />
       ))}
     </div>
   )
 }
 
 interface CardProps {
-  emoji: string
+  image: string
+  title: string
   hueA: number
   hueB: number
   i: number
 }
 
-function Card({ emoji, hueA, hueB, i }: CardProps) {
+function Card({ image, title, hueA, hueB, i }: CardProps) {
   const background = `linear-gradient(306deg, ${hue(hueA)}, ${hue(hueB)})`
 
   return (
@@ -32,7 +33,12 @@ function Card({ emoji, hueA, hueB, i }: CardProps) {
     >
       <div style={{ ...splash, background }} />
       <motion.div style={card} variants={cardVariants} className="card">
-        {emoji}
+        <div style={imageWrapper}>
+          <img src={image} alt={title} style={imageStyle} />
+          <div style={titleOverlay}>
+            <span style={{ fontSize: 16, fontWeight: 600, color: "white" }}>{title}</span>
+          </div>
+        </div>
       </motion.div>
     </motion.div>
   )
@@ -83,7 +89,6 @@ const splash: React.CSSProperties = {
 }
 
 const card: React.CSSProperties = {
-  fontSize: 164,
   width: 300,
   height: 430,
   display: "flex",
@@ -97,17 +102,40 @@ const card: React.CSSProperties = {
   transformOrigin: "10% 60%",
   border: "1px solid hsl(0 0% 100% / 0.08)",
   backdropFilter: "blur(6px)",
+  overflow: "hidden",
 }
 
-const food: [string, number, number][] = [
-  ["🍅", 340, 10],
-  ["🍊", 20, 40],
-  ["🍋", 60, 90],
-  ["🍐", 80, 120],
-  ["🍏", 100, 140],
-  ["🫐", 205, 245],
-  ["🍆", 260, 290],
-  ["🍇", 290, 320],
+const imageWrapper: React.CSSProperties = {
+  position: "relative",
+  width: "100%",
+  height: "100%",
+}
+
+const imageStyle: React.CSSProperties = {
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+  display: "block",
+}
+
+const titleOverlay: React.CSSProperties = {
+  position: "absolute",
+  left: 0,
+  right: 0,
+  bottom: 0,
+  padding: 12,
+  background: "linear-gradient(0deg, rgba(0,0,0,0.6), transparent)",
+}
+
+const food: [string, string, number, number][] = [
+  ["https://source.unsplash.com/collection/190727/900x1200", "Classic Burger", 340, 10],
+  ["https://source.unsplash.com/collection/190727/900x1201", "Neapolitan Pizza", 20, 40],
+  ["https://source.unsplash.com/collection/190727/900x1202", "Spicy Noodles", 60, 90],
+  ["https://source.unsplash.com/collection/190727/900x1203", "Sushi Roll", 80, 120],
+  ["https://source.unsplash.com/collection/190727/900x1204", "Tacos", 100, 140],
+  ["https://source.unsplash.com/collection/190727/900x1205", "Ramen", 205, 245],
+  ["https://source.unsplash.com/collection/190727/900x1206", "Fries", 260, 290],
+  ["https://source.unsplash.com/collection/190727/900x1207", "Dessert", 290, 320],
 ]
 
 

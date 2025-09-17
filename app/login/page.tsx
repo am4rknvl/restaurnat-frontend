@@ -1,4 +1,4 @@
-import { OTPLoginForm } from "@/components/auth/otp-login-form"
+import { LoginForm } from "@/components/auth/login-form"
 import Link from "next/link"
 
 export default function LoginPage() {
@@ -15,7 +15,7 @@ export default function LoginPage() {
           <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
           <p className="text-sm text-muted-foreground">Sign in to access your restaurant dashboard</p>
         </div>
-        <OTPLoginForm />
+  <LoginForm />
         <p className="px-8 text-center text-sm text-muted-foreground">
           Need help?{" "}
           <Link href="/support" className="underline underline-offset-4 hover:text-primary">

@@ -10,6 +10,8 @@ interface AuthContextType {
   deviceId: string
   requestOTP: (phoneNumber: string) => Promise<void>
   verifyOTP: (phoneNumber: string, code: string) => Promise<void>
+  login: (identifier: string, password: string) => Promise<void>
+  signup: (data: { name?: string; identifier: string; password: string; restaurantName?: string }) => Promise<void>
   logout: () => void
   error: string | null
 }
@@ -78,6 +80,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  const login = async (identifier: string, password: string) => {
+    try {
+      setError(null)
+      setIsLoading(true)
+      const resp = await apiClient.login(identifier, password)
+      if (resp?.token) {
+        localStorage.setItem("phone_number", identifier)
+        setIsAuthenticated(true)
+        setPhoneNumber(identifier)
+      }
+    } catch (err: any) {
+      setError(err.message || "Failed to login")
+      throw err
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const signup = async (data: { name?: string; identifier: string; password: string; restaurantName?: string }) => {
+    try {
+      setError(null)
+      setIsLoading(true)
+      const resp = await apiClient.signup({ name: data.name, identifier: data.identifier, password: data.password, restaurant_name: data.restaurantName })
+      // If signup returned token, treat as authenticated
+      if (resp?.token) {
+        localStorage.setItem("phone_number", data.identifier)
+        setIsAuthenticated(true)
+        setPhoneNumber(data.identifier)
+      }
+    } catch (err: any) {
+      setError(err.message || "Failed to signup")
+      throw err
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const logout = () => {
     apiClient.clearToken()
     localStorage.removeItem("phone_number")
@@ -95,6 +134,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         deviceId,
         requestOTP,
         verifyOTP,
+  login,
+  signup,
         logout,
         error,
       }}
