@@ -12,7 +12,6 @@ export default function HomePage() {
       <Navbar />
       <main>
   <HeroSection />
-  <PartnerFeed />
   <ScrollTriggered />
         <FeaturesSection />
         <PricingSection />
