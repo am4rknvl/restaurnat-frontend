@@ -27,14 +27,17 @@ export function Navbar() {
 
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8">
-              <Link href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
-                Features
+              <Link href="/products" className="text-muted-foreground hover:text-foreground transition-colors">
+                Products
               </Link>
-              <Link href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">
-                Pricing
+              <Link href="/orders" className="text-muted-foreground hover:text-foreground transition-colors">
+                Orders
               </Link>
-              <Link href="/login" className="text-muted-foreground hover:text-foreground transition-colors">
-                Login
+              <Link href="/profile" className="text-muted-foreground hover:text-foreground transition-colors">
+                Profile
+              </Link>
+              <Link href="/settings" className="text-muted-foreground hover:text-foreground transition-colors">
+                Settings
               </Link>
             </div>
           </div>

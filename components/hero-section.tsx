@@ -73,62 +73,52 @@ export function HeroSection() {
               </div>
             </motion.div>
 
-            <motion.h1
-              className="mt-6 text-4xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl text-balance"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.7, ease: "easeOut" }}
-            >
-              Run Your Restaurant <span className="text-primary">Smarter</span>
-            </motion.h1>
-
-            <motion.p
-              className="mt-6 text-lg leading-8 text-muted-foreground max-w-2xl mx-auto text-pretty"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.7, ease: "easeOut" }}
-            >
-              Streamline operations with our all-in-one platform. Handle reservations, orders, staff, and analytics
-              from one powerful dashboard.
-            </motion.p>
-
-            <motion.div
-              className="mt-10 flex items-center justify-center gap-x-6"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.7, ease: "easeOut" }}
-            >
-              <Magnetic>
-                <Button asChild size="lg" className="text-lg px-8 py-6">
-                  <Link href="/signup" ref={rippleRef as any}>Get Started</Link>
-                </Button>
-              </Magnetic>
-              <Magnetic>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="group text-lg px-8 py-6 bg-transparent transition-transform duration-200 hover:-translate-y-0.5"
+            <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+              <div className="text-left lg:pr-8">
+                <motion.h1
+                  className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.06, duration: 0.6 }}
                 >
-                  <Link href="#features" ref={rippleRef as any}>
-                    <span className="mr-2">Learn More</span>
-                    <motion.svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className="h-5 w-5"
-                      initial={{ x: 0 }}
-                      whileHover={{ x: 4 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                    >
-                      <path d="M5 12h14M13 5l7 7-7 7" />
-                    </motion.svg>
-                  </Link>
-                </Button>
-              </Magnetic>
-            </motion.div>
+                  Order from your favorite restaurants in minutes.
+                </motion.h1>
+
+                <motion.p
+                  className="mt-4 text-lg leading-7 text-muted-foreground max-w-2xl"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.12, duration: 0.6 }}
+                >
+                  Fast delivery, real-time tracking, and rewards with every bite. Fresh, sizzling, mouthwatering meals
+                  delivered to your door.
+                </motion.p>
+
+                <motion.div className="mt-6 flex flex-wrap items-center gap-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
+                  <a href="#" aria-label="App Store" className="inline-flex items-center bg-black/80 text-white px-4 py-3 rounded-lg shadow hover:translate-y-[-2px] transition-transform">
+                    <svg className="h-6 w-6 mr-3" viewBox="0 0 24 24" fill="none" aria-hidden>
+                      <rect width="24" height="24" rx="4" fill="#fff" opacity="0.08" />
+                    </svg>
+                    <span className="text-sm">Download on the</span>
+                    <strong className="ml-2">App Store</strong>
+                  </a>
+
+                  <a href="#" aria-label="Google Play" className="inline-flex items-center bg-white/6 text-white px-4 py-3 rounded-lg shadow hover:translate-y-[-2px] transition-transform">
+                    <svg className="h-6 w-6 mr-3" viewBox="0 0 24 24" fill="none" aria-hidden>
+                      <rect width="24" height="24" rx="4" fill="#fff" opacity="0.08" />
+                    </svg>
+                    <span className="text-sm">Get it on</span>
+                    <strong className="ml-2">Google Play</strong>
+                  </a>
+                </motion.div>
+              </div>
+
+              <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6 }} className="relative mx-auto w-full max-w-md">
+                <div className="rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-tr from-black/30 to-black/10">
+                  <img src="https://source.unsplash.com/collection/542909/800x900" alt="Food and phone mockup" className="w-full h-[480px] object-cover" loading="lazy" />
+                </div>
+              </motion.div>
+            </div>
           </div>
         </div>
       </div>

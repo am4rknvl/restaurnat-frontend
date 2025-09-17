@@ -128,14 +128,14 @@ const titleOverlay: React.CSSProperties = {
 }
 
 const food: [string, string, number, number][] = [
-  ["https://source.unsplash.com/collection/190727/900x1200", "Classic Burger", 340, 10],
-  ["https://source.unsplash.com/collection/190727/900x1201", "Neapolitan Pizza", 20, 40],
-  ["https://source.unsplash.com/collection/190727/900x1202", "Spicy Noodles", 60, 90],
-  ["https://source.unsplash.com/collection/190727/900x1203", "Sushi Roll", 80, 120],
-  ["https://source.unsplash.com/collection/190727/900x1204", "Tacos", 100, 140],
-  ["https://source.unsplash.com/collection/190727/900x1205", "Ramen", 205, 245],
-  ["https://source.unsplash.com/collection/190727/900x1206", "Fries", 260, 290],
-  ["https://source.unsplash.com/collection/190727/900x1207", "Dessert", 290, 320],
+  ["https://unsplash.com/photos/sandwich-with-boiled-egg-fdlZBWIP0aM", "Classic Burger", 340, 10],
+  ["https://unsplash.com/photos/pizza-on-chopping-board-MqT0asuoIcU", "Neapolitan Pizza", 20, 40],
+  ["https://unsplash.com/photos/cooked-food-awj7sRviVXo", "Spicy Noodles", 60, 90],
+  ["https://unsplash.com/photos/baked-pancakes-eeqbbemH9-c3", "Sushi Roll", 80, 120],
+  ["https://unsplash.com/photos/cooked-food-awj7sRviVXo", "Tacos", 100, 140],
+  ["https://unsplash.com/photos/toast-bread-with-blueberry-on-black-plate-zcUgjyqEwe8", "Ramen", 205, 245],
+  ["https://unsplash.com/photos/silver-spoon-on-black-ceramic-bowl-with-vegetables-1SPu0KT-Ejg", "Fries", 260, 290],
+  ["https://unsplash.com/photos/cooked-food-on-black-bowl-ZuIDLSz3XLg", "Dessert", 290, 320],
 ]
 
 

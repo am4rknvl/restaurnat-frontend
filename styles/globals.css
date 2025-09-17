@@ -12,7 +12,7 @@
   :root {
     --font-sans: var(--font-geist-sans);
     --font-mono: var(--font-geist-mono);
-    --background: 0 0% 100%;
+    --background: 3,0,46;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
@@ -49,7 +49,7 @@
   .dark {
   /* Dark blue cinematic theme */
   /* background: #0A1F44 -> hsl(218 78% 10%) approx */
-  --background: 218 78% 10%;
+  --background: 3,0,46;
   --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;
     --card-foreground: 0 0% 98%;
