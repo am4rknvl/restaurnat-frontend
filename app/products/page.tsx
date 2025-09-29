@@ -1,30 +1,103 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { apiClient } from "@/lib/api-client"
+import { useToast } from "@/hooks/use-toast"
+
+type Product = { id: string; name: string; price: number; description?: string }
 
 export default function ProductsPage() {
+  const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const { toast } = useToast()
+
+  useEffect(() => {
+    let mounted = true
+    const load = async () => {
+      try {
+        setLoading(true)
+  const base = process.env.NEXT_PUBLIC_API_BASE || ''
+  const res = await fetch(`${base}/api/v1/products`.replace(/(^\/)/, '/')).catch(() => null)
+  const data = res ? await res.json().catch(() => null) : null
+        if (!mounted) return
+        if (Array.isArray(data)) setProducts(data)
+        else
+          setProducts([
+            { id: 'p1', name: 'Margherita Pizza', price: 12.99, description: 'Classic tomato, mozzarella, basil' },
+            { id: 'p2', name: 'Chicken Biryani', price: 13.5, description: 'Fragrant rice with spices' },
+            { id: 'p3', name: 'Miso Ramen', price: 11.0, description: 'Savory broth with noodles' },
+          ])
+      } catch (err: any) {
+        console.error('Failed to load products', err)
+        setError(err.message || 'Failed to load products')
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  const addToCartAndGo = (productId: string) => {
+    // Persist a small prefill cart to localStorage so Orders page picks it up
+    const existing = JSON.parse(localStorage.getItem('prefill_cart') || '{}') as Record<string, number>
+    existing[productId] = (existing[productId] || 0) + 1
+    localStorage.setItem('prefill_cart', JSON.stringify(existing))
+    toast({ title: 'Added to cart', description: 'Open Orders to continue to checkout.' })
+  }
+
   return (
-    <main className="container mx-auto px-4 py-16">
-      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-        <h1 className="text-3xl font-bold">Browse Products & Services</h1>
-        <p className="mt-4 text-muted-foreground">Explore menus, filter by cuisine, and view detailed item pages with photos, ingredients, and dietary labels.</p>
+    <main className="container mx-auto px-4 py-12">
+      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">Products & Menu</h1>
+            <p className="mt-2 text-muted-foreground">Browse items and add them to the cart for quick checkout.</p>
+          </div>
+          <div>
+            <Link href="/orders" className="underline">Open Orders →</Link>
+          </div>
+        </div>
 
-        <section className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <article className="p-6 rounded-lg bg-card">
-            <h3 className="font-semibold">Rich product cards</h3>
-            <p className="mt-2 text-sm text-muted-foreground">High-resolution images, modifiers, options (size, spice level), and add-ons with live pricing.</p>
-          </article>
-          <article className="p-6 rounded-lg bg-card">
-            <h3 className="font-semibold">Search & filters</h3>
-            <p className="mt-2 text-sm text-muted-foreground">Filter by cuisine, dietary needs, and partner restaurant. Sort by popularity or delivery time.</p>
-          </article>
-          <article className="p-6 rounded-lg bg-card">
-            <h3 className="font-semibold">Partner integration</h3>
-            <p className="mt-2 text-sm text-muted-foreground">Pull dynamic menus from partner APIs and sync availability in real-time.</p>
-          </article>
-        </section>
-
-        <div className="mt-8">
-          <Link href="/orders" className="underline">Go to Orders →</Link>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {loading ? (
+            Array.from({ length: 6 }).map((_, i) => (
+              <Card key={i} className="p-4">
+                <CardHeader>
+                  <CardTitle className="h-4 bg-gray-200 rounded w-48" />
+                </CardHeader>
+                <CardContent>
+                  <div className="h-20 bg-gray-100 rounded" />
+                </CardContent>
+              </Card>
+            ))
+          ) : error ? (
+            <div className="p-4 bg-red-50 text-red-700 rounded">{error}</div>
+          ) : (
+            products.map((p) => (
+              <Card key={p.id} className="p-4">
+                <CardHeader>
+                  <CardTitle>{p.name}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">{p.description}</p>
+                  <div className="mt-4 flex items-center justify-between">
+                    <div className="font-semibold">${p.price.toFixed(2)}</div>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm" onClick={() => addToCartAndGo(p.id)}>Add & Open Orders</Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          )}
         </div>
       </motion.div>
     </main>
