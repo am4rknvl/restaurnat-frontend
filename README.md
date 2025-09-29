@@ -61,7 +61,7 @@ Build & Deployment: Vite / Next.js build / Docker
 
 Clone the repo:
 
-git clone https://github.com/your-username/restaurant-frontend.git
+git clone https://github.com/am4rknvl/restaurant-frontend.git
 cd restaurant-frontend
 
 
