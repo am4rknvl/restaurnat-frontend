@@ -1,14 +1,16 @@
 "use client"
 
-import { motion, useMotionValue, useTransform, animate } from "framer-motion"
+import { useMotionValue, animate } from "framer-motion"
 import React, { useEffect, useRef } from "react"
 
 function useAnimatedNumber(value: number, duration = 1.6) {
   const ref = useRef<HTMLSpanElement | null>(null)
+  // motion value must be created at hook top-level
+  const motionVal = useMotionValue(0)
+
   useEffect(() => {
     if (!ref.current) return
     const node = ref.current
-    const motionVal = useMotionValue(0)
     const controls = animate(motionVal, value, { duration })
     const unsubscribe = motionVal.onChange((v) => {
       node.textContent = Math.floor(v).toLocaleString()
@@ -17,6 +19,8 @@ function useAnimatedNumber(value: number, duration = 1.6) {
       controls.stop()
       unsubscribe()
     }
+    // motionVal is stable across renders from useMotionValue
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, duration])
   return ref
 }
