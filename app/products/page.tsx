@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { apiClient } from "@/lib/api-client"
+import { useCart } from "@/hooks/use-cart"
 import { useToast } from "@/hooks/use-toast"
 
 type Product = { id: string; name: string; price: number; description?: string }
@@ -17,6 +18,7 @@ export default function ProductsPage() {
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState<string | undefined>(undefined)
   const { toast } = useToast()
+  const { add } = useCart()
 
   useEffect(() => {
     let mounted = true
@@ -47,14 +49,10 @@ export default function ProductsPage() {
 
   const addToCartAndGo = (productId: string) => {
     try {
-      // Persist a small prefill cart to localStorage so Orders page picks it up
-      if (typeof window === 'undefined') return
-      const existing = JSON.parse(localStorage.getItem('prefill_cart') || '{}') as Record<string, number>
-      existing[productId] = (existing[productId] || 0) + 1
-      localStorage.setItem('prefill_cart', JSON.stringify(existing))
+      add(productId, 1)
       toast({ title: 'Added to cart', description: 'Open Orders to continue to checkout.' })
     } catch (err) {
-      console.error('Failed to persist cart prefill', err)
+      console.error('Failed to add to cart', err)
       toast({ title: 'Error', description: 'Could not add to cart' })
     }
   }
