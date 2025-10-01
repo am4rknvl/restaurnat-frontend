@@ -4,9 +4,13 @@ import React from "react"
 import { useCart } from "@/hooks/use-cart"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { useToast } from "@/hooks/use-toast"
+import { apiClient } from "@/lib/api-client"
 
 export function CartDrawer({ products }: { products: any[] }) {
   const { items, add, remove, setQty, clear, totalCount } = useCart()
+  const { toast } = useToast()
+  const [isCheckingOut, setIsCheckingOut] = React.useState(false)
 
   const itemsWithProduct = items.map((it) => ({ ...it, product: products.find((p) => p.id === it.id) }))
   const subtotal = itemsWithProduct.reduce((s, it) => s + ((it.product?.price || 0) * it.qty), 0)
@@ -46,7 +50,37 @@ export function CartDrawer({ products }: { products: any[] }) {
                 </div>
 
                 <div className="flex gap-2 mt-4">
-                  <Button onClick={() => alert('Proceed to checkout (not implemented)')} className="flex-1">Checkout</Button>
+                  <Button
+                    onClick={async () => {
+                      try {
+                        // Minimal prompt-based checkout for now
+                        const name = prompt('Enter full name for the order') || ''
+                        const phone = prompt('Enter phone number') || ''
+                        if (!name || !phone) {
+                          toast({ title: 'Missing details', description: 'Name and phone are required', variant: 'destructive' })
+                          return
+                        }
+                        setIsCheckingOut(true)
+                        const payload = {
+                          customer_name: name,
+                          phone,
+                          items: items.map((it: any) => ({ product_id: it.id, quantity: it.qty })),
+                        }
+                        const res = await apiClient.createOrder(payload)
+                        toast({ title: 'Order placed', description: `Order #${res.id} created.` })
+                        clear()
+                      } catch (err: any) {
+                        console.error('Checkout failed', err)
+                        toast({ title: 'Checkout failed', description: err.message || 'Unable to place order', variant: 'destructive' })
+                      } finally {
+                        setIsCheckingOut(false)
+                      }
+                    }}
+                    className="flex-1"
+                    disabled={isCheckingOut}
+                  >
+                    {isCheckingOut ? 'Placing...' : 'Checkout'}
+                  </Button>
                   <Button variant="ghost" onClick={() => clear()}>Clear</Button>
                 </div>
               </div>

@@ -4,6 +4,8 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { motion, useScroll, useTransform } from "framer-motion"
 import { Magnetic } from "@/components/ui/magnetic"
+import { useCart } from "@/hooks/use-cart"
+import { ShoppingCart } from "lucide-react"
 
 export function Navbar() {
   const { scrollY } = useScroll()
@@ -53,9 +55,22 @@ export function Navbar() {
                 <Link href="/signup">Get Started</Link>
               </Button>
             </Magnetic>
+            <Magnetic>
+              <Button asChild variant="ghost">
+                <Link href="/orders" className="flex items-center gap-2">
+                  <ShoppingCart className="h-5 w-5" />
+                  <CartCount />
+                </Link>
+              </Button>
+            </Magnetic>
           </div>
         </div>
       </div>
     </motion.nav>
   )
+}
+
+function CartCount() {
+  const { totalCount } = useCart()
+  return <span className="text-sm text-muted-foreground">{totalCount} items</span>
 }
