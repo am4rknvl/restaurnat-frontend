@@ -164,6 +164,52 @@ class ApiClient {
       body: JSON.stringify({ status }),
     })
   }
+
+  // Products
+  async getProducts(params?: { page?: number; q?: string; category?: string }) {
+    const qs = new URLSearchParams()
+    if (params?.page) qs.set('page', String(params.page))
+    if (params?.q) qs.set('q', params.q)
+    if (params?.category) qs.set('category', params.category)
+    const suffix = qs.toString() ? `?${qs.toString()}` : ''
+    return this.request<any[]>(`/api/v1/products${suffix}`)
+  }
+
+  async getProduct(id: string) {
+    return this.request<any>(`/api/v1/products/${id}`)
+  }
+
+  // Reservations
+  async getReservations() {
+    return this.request<any[]>('/api/v1/reservations')
+  }
+
+  async getReservation(id: string) {
+    return this.request<any>(`/api/v1/reservations/${id}`)
+  }
+
+  async createReservation(payload: any) {
+    return this.request<any>('/api/v1/reservations', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    })
+  }
+
+  async updateReservation(id: string, payload: any) {
+    return this.request<any>(`/api/v1/reservations/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    })
+  }
+
+  // Staff
+  async getStaff() {
+    return this.request<any[]>('/api/v1/staff')
+  }
+
+  async getStaffMember(id: string) {
+    return this.request<any>(`/api/v1/staff/${id}`)
+  }
 }
 
 export const apiClient = new ApiClient()
