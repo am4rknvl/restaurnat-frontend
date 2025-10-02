@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8080"
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "http://IPV4:1337"
 
 export class ApiError extends Error {
   constructor(
@@ -162,6 +162,14 @@ class ApiClient {
     return this.request<any>(`/api/v1/kitchen/orders/${id}/status`, {
       method: "PUT",
       body: JSON.stringify({ status }),
+    })
+  }
+
+  // Table / session endpoints
+  async createTableSession(tableId: string) {
+    return this.request<any>(`/api/v1/tables/${tableId}/session`, {
+      method: 'POST',
+      body: JSON.stringify({ table_id: tableId }),
     })
   }
 

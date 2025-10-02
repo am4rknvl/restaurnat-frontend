@@ -10,6 +10,7 @@ import { AuthProvider } from "@/hooks/use-auth"
 import { CartProvider } from "@/hooks/use-cart"
 import { ErrorBoundary } from "@/components/error-boundary"
 import { Toaster } from "@/components/ui/toaster"
+import SWRegister from '@/components/sw-register'
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 </AnimatePresence>
               </Suspense>
               <Toaster />
+              <SWRegister />
             </CartProvider>
           </AuthProvider>
         </ErrorBoundary>

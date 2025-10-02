@@ -79,4 +79,8 @@
     "playwright": "^1.37.0",
     "@stripe/stripe-js": "^1.46.0"
   }
+  ,
+  "dependenciesMeta": {
+    "qrcode": { "optional": true }
+  }
 }

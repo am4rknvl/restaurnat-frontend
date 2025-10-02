@@ -6,6 +6,8 @@ import { motion, useScroll, useTransform } from "framer-motion"
 import { Magnetic } from "@/components/ui/magnetic"
 import { useCart } from "@/hooks/use-cart"
 import { ShoppingCart } from "lucide-react"
+import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
+import { CartDrawer } from "@/components/cart-drawer"
 
 export function Navbar() {
   const { scrollY } = useScroll()
@@ -64,6 +66,25 @@ export function Navbar() {
               </Button>
             </Magnetic>
           </div>
+          {/* Mobile floating cart button + sheet */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <button
+                aria-label="Open cart"
+                className="md:hidden fixed bottom-4 right-4 z-[60] rounded-full bg-primary p-3 shadow-lg text-primary-foreground"
+              >
+                <ShoppingCart className="h-5 w-5" />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="bottom">
+              <SheetHeader>
+                <SheetTitle>Your Cart</SheetTitle>
+              </SheetHeader>
+              <div className="pt-4 overflow-auto max-h-[70vh]">
+                <CartDrawer products={[]} isSheet />
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </motion.nav>
