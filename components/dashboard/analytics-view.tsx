@@ -3,6 +3,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Skeleton } from "@/components/ui/skeleton"
+import { useDashboardStats } from "@/hooks/use-dashboard-data"
 import {
   BarChart,
   Bar,
@@ -54,6 +56,7 @@ const dishData = [
 const COLORS = ["#ff6b35", "#f7931e", "#ffd23f", "#06d6a0"]
 
 export function AnalyticsView() {
+  const { stats, isLoading } = useDashboardStats()
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -63,11 +66,20 @@ export function AnalyticsView() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$45,231</div>
-            <p className="text-xs text-muted-foreground flex items-center">
-              <TrendingUp className="h-3 w-3 mr-1 text-green-500" />
-              +20.1% from last month
-            </p>
+            {isLoading ? (
+              <>
+                <Skeleton className="h-8 w-28 mb-2" />
+                <Skeleton className="h-3 w-36" />
+              </>
+            ) : (
+              <>
+                <div className="text-2xl font-bold">${stats?.total_revenue?.toLocaleString?.() || 0}</div>
+                <p className="text-xs text-muted-foreground flex items-center">
+                  <TrendingUp className="h-3 w-3 mr-1 text-green-500" />
+                  {stats ? `${stats.revenue_change}% from last period` : ""}
+                </p>
+              </>
+            )}
           </CardContent>
         </Card>
 
@@ -77,11 +89,20 @@ export function AnalyticsView() {
             <ShoppingCart className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1,234</div>
-            <p className="text-xs text-muted-foreground flex items-center">
-              <TrendingUp className="h-3 w-3 mr-1 text-green-500" />
-              +12% from last month
-            </p>
+            {isLoading ? (
+              <>
+                <Skeleton className="h-8 w-16 mb-2" />
+                <Skeleton className="h-3 w-24" />
+              </>
+            ) : (
+              <>
+                <div className="text-2xl font-bold">{stats?.orders_today ?? 0}</div>
+                <p className="text-xs text-muted-foreground flex items-center">
+                  <TrendingUp className="h-3 w-3 mr-1 text-green-500" />
+                  {stats ? `${stats.orders_change}% from last period` : ""}
+                </p>
+              </>
+            )}
           </CardContent>
         </Card>
 
@@ -91,11 +112,20 @@ export function AnalyticsView() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$36.67</div>
-            <p className="text-xs text-muted-foreground flex items-center">
-              <TrendingDown className="h-3 w-3 mr-1 text-red-500" />
-              -2.1% from last month
-            </p>
+            {isLoading ? (
+              <>
+                <Skeleton className="h-8 w-20 mb-2" />
+                <Skeleton className="h-3 w-24" />
+              </>
+            ) : (
+              <>
+                <div className="text-2xl font-bold">${stats ? Math.max(1, Math.round((stats.total_revenue / Math.max(1, stats.orders_today || 1)) * 100) / 100).toFixed(2) : "0.00"}</div>
+                <p className="text-xs text-muted-foreground flex items-center">
+                  <TrendingDown className="h-3 w-3 mr-1 text-red-500" />
+                  -2.1% from last period
+                </p>
+              </>
+            )}
           </CardContent>
         </Card>
 
@@ -105,11 +135,20 @@ export function AnalyticsView() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">4.8/5</div>
-            <p className="text-xs text-muted-foreground flex items-center">
-              <TrendingUp className="h-3 w-3 mr-1 text-green-500" />
-              +0.2 from last month
-            </p>
+            {isLoading ? (
+              <>
+                <Skeleton className="h-8 w-16 mb-2" />
+                <Skeleton className="h-3 w-24" />
+              </>
+            ) : (
+              <>
+                <div className="text-2xl font-bold">4.8/5</div>
+                <p className="text-xs text-muted-foreground flex items-center">
+                  <TrendingUp className="h-3 w-3 mr-1 text-green-500" />
+                  +0.2 from last period
+                </p>
+              </>
+            )}
           </CardContent>
         </Card>
       </div>
