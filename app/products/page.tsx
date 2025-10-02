@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { apiClient } from "@/lib/api-client"
+import { useCart } from "@/hooks/use-cart"
 import { useToast } from "@/hooks/use-toast"
 
 type Product = { id: string; name: string; price: number; description?: string }
@@ -14,16 +15,17 @@ export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [query, setQuery] = useState('')
+  const [category, setCategory] = useState<string | undefined>(undefined)
   const { toast } = useToast()
+  const { add } = useCart()
 
   useEffect(() => {
     let mounted = true
     const load = async () => {
       try {
         setLoading(true)
-  const base = process.env.NEXT_PUBLIC_API_BASE || ''
-  const res = await fetch(`${base}/api/v1/products`.replace(/(^\/)/, '/')).catch(() => null)
-  const data = res ? await res.json().catch(() => null) : null
+        const data = await apiClient.getProducts({ q: query || undefined, category })
         if (!mounted) return
         if (Array.isArray(data)) setProducts(data)
         else
@@ -43,14 +45,16 @@ export default function ProductsPage() {
     return () => {
       mounted = false
     }
-  }, [])
+  }, [query, category])
 
   const addToCartAndGo = (productId: string) => {
-    // Persist a small prefill cart to localStorage so Orders page picks it up
-    const existing = JSON.parse(localStorage.getItem('prefill_cart') || '{}') as Record<string, number>
-    existing[productId] = (existing[productId] || 0) + 1
-    localStorage.setItem('prefill_cart', JSON.stringify(existing))
-    toast({ title: 'Added to cart', description: 'Open Orders to continue to checkout.' })
+    try {
+      add(productId, 1)
+      toast({ title: 'Added to cart', description: 'Open Orders to continue to checkout.' })
+    } catch (err) {
+      console.error('Failed to add to cart', err)
+      toast({ title: 'Error', description: 'Could not add to cart' })
+    }
   }
 
   return (
@@ -64,6 +68,16 @@ export default function ProductsPage() {
           <div>
             <Link href="/orders" className="underline">Open Orders →</Link>
           </div>
+        </div>
+
+        <div className="mt-6 flex items-center gap-4">
+          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search menu..." className="input" />
+          <select value={category || ''} onChange={(e) => setCategory(e.target.value || undefined)} className="input">
+            <option value="">All categories</option>
+            <option value="pizza">Pizza</option>
+            <option value="asian">Asian</option>
+            <option value="dessert">Dessert</option>
+          </select>
         </div>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

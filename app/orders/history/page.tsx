@@ -8,6 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
+import { useCart } from "@/hooks/use-cart"
+import { useRouter } from "next/navigation"
 
 export default function OrdersHistoryPage() {
   const [orders, setOrders] = useState<any[]>([])
@@ -51,21 +53,24 @@ export default function OrdersHistoryPage() {
     return filtered.slice(start, start + pageSize)
   }, [filtered, page])
 
-  const handleReorder = async (order: any) => {
+  const { add, clear } = useCart()
+  const router = useRouter()
+
+  const handleReorder = (order: any) => {
     try {
-      toast({ title: "Reordering", description: "Placing reorder…" })
-      const payload = {
-        customer_name: order.customer_name || "Reorder",
-        phone: order.phone || "",
-        items: order.items,
-        total_amount: order.total_amount,
-      }
-      const res = await apiClient.createOrder(payload)
-      toast({ title: "Reorder placed", description: `Order #${res.id} created.` })
-      fetchOrders()
+      // Load order items into cart and navigate to Orders page for review/checkout
+      clear()
+      ;(order.items || []).forEach((it: any) => {
+        // items expected shape: { product_id | id, quantity, price, name }
+        const id = it.product_id || it.id || it.productId
+        if (!id) return
+        add(id, it.quantity || it.qty || 1)
+      })
+      toast({ title: "Loaded to cart", description: "Review your cart and proceed to checkout." })
+      router.push('/orders')
     } catch (err: any) {
       console.error("Reorder failed", err)
-      toast({ title: "Failed", description: err.message || "Unable to place reorder.", variant: "destructive" })
+      toast({ title: "Failed", description: err.message || "Unable to load reorder.", variant: "destructive" })
     }
   }
 

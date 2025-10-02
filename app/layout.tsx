@@ -7,6 +7,7 @@ import { Suspense } from "react"
 import { AnimatePresence } from "framer-motion"
 import { PageTransition } from "@/components/page-transition"
 import { AuthProvider } from "@/hooks/use-auth"
+import { CartProvider } from "@/hooks/use-cart"
 import { ErrorBoundary } from "@/components/error-boundary"
 import { Toaster } from "@/components/ui/toaster"
 import "./globals.css"
@@ -24,12 +25,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <ErrorBoundary>
           <AuthProvider>
-            <Suspense fallback={null}>
-              <AnimatePresence mode="wait">
-                <PageTransition>{children}</PageTransition>
-              </AnimatePresence>
-            </Suspense>
-            <Toaster />
+            <CartProvider>
+              <Suspense fallback={null}>
+                <AnimatePresence mode="wait">
+                  <PageTransition>{children}</PageTransition>
+                </AnimatePresence>
+              </Suspense>
+              <Toaster />
+            </CartProvider>
           </AuthProvider>
         </ErrorBoundary>
         <Analytics />
