@@ -1,36 +1,27 @@
-import { Navbar } from "@/components/navbar"
-import { HeroSection } from "@/components/hero-section"
-import { LiveStats } from "@/components/live-stats"
-import { SocialProof } from "@/components/social-proof"
-import { FeaturesSection } from "@/components/features-section"
-import { MenuCarousel } from "@/components/menu-carousel"
-import { HowItWorks } from "@/components/how-it-works"
-import { Testimonials } from "@/components/testimonials"
-import { SuccessStory } from "@/components/success-story"
-import { PricingSection } from "@/components/pricing-section"
-import { FAQ, ContactForm } from "@/components/faq-contact"
-import { Footer } from "@/components/footer"
-import ScrollTriggered from "@/components/scroll-triggered"
+'use client'
+
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { useAuthStore } from '@/lib/stores/auth-store'
 
 export default function HomePage() {
+  const router = useRouter()
+  const { isAuthenticated } = useAuthStore()
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/dashboard')
+    } else {
+      router.push('/login')
+    }
+  }, [isAuthenticated, router])
+
   return (
-    <div className="min-h-screen">
-      <Navbar />
-      <main>
-        <HeroSection />
-        <LiveStats />
-        <SocialProof />
-        <ScrollTriggered />
-        <FeaturesSection />
-        <MenuCarousel />
-        <HowItWorks />
-        <Testimonials />
-        <SuccessStory />
-        <PricingSection />
-        <FAQ />
-        <ContactForm />
-      </main>
-      <Footer />
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+        <p className="mt-4 text-gray-600">Loading...</p>
+      </div>
     </div>
   )
 }

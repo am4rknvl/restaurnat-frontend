@@ -19,7 +19,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
   const connect = () => {
     if (wsRef.current?.readyState === WebSocket.OPEN) return
 
-    const wsUrl = process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:8080/api/v1/ws"
+    const wsUrl = process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:8080"
     const token = localStorage.getItem("auth_token")
 
     if (!token) {
@@ -28,7 +28,8 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
     }
 
     try {
-      wsRef.current = new WebSocket(`${wsUrl}?token=${token}`)
+      // Backend has /ws endpoint for general WebSocket connections
+      wsRef.current = new WebSocket(`${wsUrl}/ws?token=${token}`)
 
       wsRef.current.onopen = () => {
         console.log("[v0] WebSocket connected")
