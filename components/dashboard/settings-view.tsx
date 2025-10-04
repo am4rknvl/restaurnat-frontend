@@ -1,3 +1,5 @@
+"use client"
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -25,7 +27,7 @@ export function SettingsView() {
     }
     try {
       setSavingInfo(true)
-      await apiClient.request<any>('/api/v1/settings/restaurant', { method: 'PUT', body: JSON.stringify(payload) } as any)
+      await apiClient.updateRestaurantSettings(payload)
       toast({ title: 'Saved', description: 'Restaurant information updated.' })
     } catch (e: any) {
       toast({ title: 'Failed', description: e.message || 'Could not save info' })
@@ -43,7 +45,7 @@ export function SettingsView() {
     }
     try {
       setSavingHours(true)
-      await apiClient.request<any>('/api/v1/settings/hours', { method: 'PUT', body: JSON.stringify(payload) } as any)
+      await apiClient.updateOperatingHours(payload)
       toast({ title: 'Updated', description: 'Operating hours updated.' })
     } catch (e: any) {
       toast({ title: 'Failed', description: e.message || 'Could not update hours' })
@@ -61,7 +63,7 @@ export function SettingsView() {
     }
     try {
       setUpdatingPassword(true)
-      await apiClient.request<any>('/api/v1/auth/password', { method: 'PUT', body: JSON.stringify(payload) } as any)
+      await apiClient.updatePassword(payload)
       toast({ title: 'Password updated' })
     } catch (e: any) {
       toast({ title: 'Failed', description: e.message || 'Could not update password' })

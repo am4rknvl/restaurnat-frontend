@@ -218,6 +218,28 @@ class ApiClient {
   async getStaffMember(id: string) {
     return this.request<any>(`/api/v1/staff/${id}`)
   }
+
+  // Settings endpoints
+  async updateRestaurantSettings(payload: any) {
+    return this.request('/api/v1/settings/restaurant', {
+      method: 'PUT',
+      body: JSON.stringify(payload)
+    })
+  }
+
+  async updateOperatingHours(payload: any) {
+    return this.request('/api/v1/settings/hours', {
+      method: 'PUT',
+      body: JSON.stringify(payload)
+    })
+  }
+
+  async updatePassword(payload: any) {
+    return this.request('/api/v1/auth/password', {
+      method: 'PUT',
+      body: JSON.stringify(payload)
+    })
+  }
 }
 
 export const apiClient = new ApiClient()
