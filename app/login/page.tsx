@@ -6,6 +6,7 @@ import { useAuthStore } from '@/lib/stores/auth-store'
 import { motion } from 'framer-motion'
 import { DuoButton } from '@/components/ui/duo-button'
 import { DuoInput } from '@/components/ui/duo-input'
+import Link from 'next/link'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -103,9 +104,9 @@ export default function LoginPage() {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               New here?{' '}
-              <button className="text-duo-blue font-bold hover:underline">
+              <Link href="/signup" className="text-duo-blue font-bold hover:underline">
                 Create Account
-              </button>
+              </Link>
             </p>
           </div>
         </motion.div>

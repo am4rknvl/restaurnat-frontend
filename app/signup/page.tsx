@@ -25,9 +25,10 @@ export default function SignupPage() {
     try {
       await signup({
         name: formData.name,
-        identifier: formData.email || formData.phone,
+        email: formData.email,
+        phone: formData.phone,
         password: formData.password,
-        restaurantName: formData.restaurant_name,
+        restaurant_name: formData.restaurant_name,
       })
       router.push('/dashboard')
     } catch (err) {
