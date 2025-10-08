@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { DuoCard } from '@/components/ui/duo-card'
 import { DuoButton } from '@/components/ui/duo-button'
+import Link from 'next/link'
 
 export default function MenuPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('')
@@ -37,9 +38,18 @@ export default function MenuPage() {
               <p className="text-lg text-gray-600">Manage your delicious offerings</p>
             </div>
           </div>
-          <DuoButton variant="primary" size="lg">
-            ➕ Add New Item
-          </DuoButton>
+          <div className="flex gap-3">
+            <Link href="/dashboard/menu/categories">
+              <DuoButton variant="secondary" size="lg">
+                📂 Categories
+              </DuoButton>
+            </Link>
+            <Link href="/dashboard/menu/add">
+              <DuoButton variant="primary" size="lg">
+                ➕ Add New Item
+              </DuoButton>
+            </Link>
+          </div>
         </div>
 
         {/* Category Filter */}
@@ -124,9 +134,11 @@ export default function MenuPage() {
                     <div className="text-2xl font-extrabold text-duo-green">
                       ${item.price?.toFixed(2) || '0.00'}
                     </div>
-                    <DuoButton variant="secondary" size="sm">
-                      ✏️ Edit
-                    </DuoButton>
+                    <Link href={`/dashboard/menu/edit/${item.id}`}>
+                      <DuoButton variant="secondary" size="sm">
+                        ✏️ Edit
+                      </DuoButton>
+                    </Link>
                   </div>
                 </DuoCard>
               </motion.div>
@@ -140,9 +152,11 @@ export default function MenuPage() {
                 No menu items yet
               </h3>
               <p className="text-gray-600 mb-6">Start building your menu!</p>
-              <DuoButton variant="primary" size="lg">
-                ➕ Add Your First Item
-              </DuoButton>
+              <Link href="/dashboard/menu/add">
+                <DuoButton variant="primary" size="lg">
+                  ➕ Add Your First Item
+                </DuoButton>
+              </Link>
             </div>
           </DuoCard>
         )}
