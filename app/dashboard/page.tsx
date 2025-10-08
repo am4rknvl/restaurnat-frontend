@@ -3,6 +3,7 @@
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { useOrders } from '@/lib/hooks/use-orders'
 import { useMenuItems } from '@/lib/hooks/use-menu'
+import { useLoyalty } from '@/lib/hooks/use-loyalty'
 import { motion } from 'framer-motion'
 import { DuoCard } from '@/components/ui/duo-card'
 import { DuoButton } from '@/components/ui/duo-button'
@@ -15,11 +16,13 @@ export default function DashboardPage() {
   const { user, logout } = useAuthStore()
   const { data: orders, isLoading: ordersLoading } = useOrders()
   const { data: menuItems, isLoading: menuLoading } = useMenuItems()
+  const { data: loyaltyData } = useLoyalty()
 
-  // Gamification calculations
+  // Gamification calculations - use loyalty data if available, otherwise calculate from orders
   const totalOrders = orders?.length || 0
-  const xp = totalOrders * 10 // 10 XP per order
-  const level = Math.floor(xp / 100) + 1
+  const xp = loyaltyData?.points || (totalOrders * 10) // 10 XP per order
+  const level = loyaltyData?.level || (Math.floor(xp / 100) + 1)
+  const streak = loyaltyData?.streak || 0
   const xpToNextLevel = ((level * 100) - xp)
   const progressToNextLevel = ((xp % 100) / 100) * 100
 
@@ -61,7 +64,7 @@ export default function DashboardPage() {
           className="mb-8"
         >
           <div className="flex items-center justify-between mb-4">
-            <StreakCounter streak={7} />
+            <StreakCounter streak={streak} />
             <div className="text-sm font-bold text-duo-darkGray">
               {xpToNextLevel} XP to Level {level + 1}
             </div>

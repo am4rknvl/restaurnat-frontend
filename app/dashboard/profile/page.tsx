@@ -7,15 +7,22 @@ import { DuoCard } from '@/components/ui/duo-card'
 import { DuoButton } from '@/components/ui/duo-button'
 import { DuoInput } from '@/components/ui/duo-input'
 import { apiClient } from '@/lib/api/client'
+import { useLoyalty } from '@/lib/hooks/use-loyalty'
 
 export default function ProfilePage() {
   const { user } = useAuthStore()
+  const { data: loyaltyData, isLoading: loyaltyLoading } = useLoyalty()
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
     name: user?.name || '',
     email: user?.email || '',
     phone: user?.phone || '',
   })
+
+  // Get loyalty data or use defaults
+  const xp = loyaltyData?.points || 0
+  const level = loyaltyData?.level || 1
+  const streak = loyaltyData?.streak || 0
 
   const handleSave = async () => {
     try {
@@ -105,7 +112,9 @@ export default function ProfilePage() {
             <DuoCard>
               <div className="text-center">
                 <div className="text-5xl mb-3">⚡</div>
-                <div className="text-3xl font-extrabold text-duo-green mb-2">1,250</div>
+                <div className="text-3xl font-extrabold text-duo-green mb-2">
+                  {loyaltyLoading ? '...' : xp}
+                </div>
                 <div className="text-sm font-bold text-gray-600">Total XP</div>
               </div>
             </DuoCard>
@@ -113,7 +122,9 @@ export default function ProfilePage() {
             <DuoCard>
               <div className="text-center">
                 <div className="text-5xl mb-3">🏆</div>
-                <div className="text-3xl font-extrabold text-duo-yellow mb-2">Level 5</div>
+                <div className="text-3xl font-extrabold text-duo-yellow mb-2">
+                  {loyaltyLoading ? '...' : `Level ${level}`}
+                </div>
                 <div className="text-sm font-bold text-gray-600">Your Level</div>
               </div>
             </DuoCard>
@@ -121,7 +132,9 @@ export default function ProfilePage() {
             <DuoCard>
               <div className="text-center">
                 <div className="text-5xl mb-3">🔥</div>
-                <div className="text-3xl font-extrabold text-duo-error mb-2">12</div>
+                <div className="text-3xl font-extrabold text-duo-error mb-2">
+                  {loyaltyLoading ? '...' : streak}
+                </div>
                 <div className="text-sm font-bold text-gray-600">Day Streak</div>
               </div>
             </DuoCard>
