@@ -2,14 +2,14 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useCreateMenuItem } from '@/lib/hooks/use-menu'
-import { useMenuCategories } from '@/lib/hooks/use-menu'
+import { useMenuCategories, useCreateMenuItem } from '@/lib/hooks/use-menu'
+import { RouteGuard } from '@/lib/auth/route-guard'
 import { motion } from 'framer-motion'
 import { DuoCard } from '@/components/ui/duo-card'
 import { DuoButton } from '@/components/ui/duo-button'
 import { DuoInput } from '@/components/ui/duo-input'
 
-export default function AddMenuItemPage() {
+function AddMenuItemPageContent() {
   const router = useRouter()
   const createMenuItem = useCreateMenuItem()
   const { data: categories } = useMenuCategories()
@@ -313,5 +313,13 @@ export default function AddMenuItemPage() {
         </form>
       </div>
     </div>
+  )
+}
+
+export default function AddMenuItemPage() {
+  return (
+    <RouteGuard requiredRoles={['manager', 'admin']}>
+      <AddMenuItemPageContent />
+    </RouteGuard>
   )
 }

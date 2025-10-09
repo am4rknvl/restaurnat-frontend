@@ -2,13 +2,14 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { apiClient } from '../api/client'
 import { wsClient } from '../websocket/client'
+import { UserRole, getDefaultDashboard } from '../auth/roles'
 
 interface User {
   id: string
   name?: string
   email?: string
   phone?: string
-  role?: string
+  role: UserRole
 }
 
 interface AuthState {
@@ -43,11 +44,23 @@ export const useAuthStore = create<AuthState>()(
           const { token, user } = response.data
 
           apiClient.setToken(token)
+          
+          // Fetch full user profile with role information
+          let userWithRole = user
+          if (!user.role) {
+            try {
+              const meResponse = await apiClient.customer.me()
+              userWithRole = meResponse.data
+            } catch (e) {
+              console.warn('Failed to fetch user role, using default')
+            }
+          }
+
           wsClient.connect(token)
 
           set({
             token,
-            user,
+            user: userWithRole,
             isAuthenticated: true,
             isLoading: false,
           })
@@ -68,11 +81,23 @@ export const useAuthStore = create<AuthState>()(
 
           if (token) {
             apiClient.setToken(token)
+            
+            // Fetch full user profile with role information
+            let userWithRole = user
+            if (!user.role) {
+              try {
+                const meResponse = await apiClient.customer.me()
+                userWithRole = meResponse.data
+              } catch (e) {
+                console.warn('Failed to fetch user role, using default')
+              }
+            }
+
             wsClient.connect(token)
 
             set({
               token,
-              user,
+              user: userWithRole,
               isAuthenticated: true,
               isLoading: false,
             })
@@ -113,11 +138,23 @@ export const useAuthStore = create<AuthState>()(
           const { token, user } = response.data
 
           apiClient.setToken(token)
+          
+          // Fetch full user profile with role information
+          let userWithRole = user
+          if (!user.role) {
+            try {
+              const meResponse = await apiClient.customer.me()
+              userWithRole = meResponse.data
+            } catch (e) {
+              console.warn('Failed to fetch user role, using default')
+            }
+          }
+
           wsClient.connect(token)
 
           set({
             token,
-            user,
+            user: userWithRole,
             isAuthenticated: true,
             isLoading: false,
           })
@@ -146,7 +183,13 @@ export const useAuthStore = create<AuthState>()(
       fetchUser: async () => {
         try {
           const response = await apiClient.customer.me()
-          set({ user: response.data })
+          const userData = response.data
+          set({ user: userData })
+          
+          // Ensure role is present and valid
+          if (!userData.role) {
+            console.warn('User role is missing from /me endpoint')
+          }
         } catch (error) {
           console.error('Failed to fetch user:', error)
         }

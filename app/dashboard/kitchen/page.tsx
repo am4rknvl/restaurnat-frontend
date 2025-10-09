@@ -4,11 +4,12 @@ import { useKitchenOrders, useUpdateKitchenOrderStatus } from '@/lib/hooks/use-k
 import { useEffect } from 'react'
 import { OrderWebSocket } from '@/lib/websocket/client'
 import { useAuthStore } from '@/lib/stores/auth-store'
+import { RouteGuard } from '@/lib/auth/route-guard'
 import { motion } from 'framer-motion'
 import { DuoCard } from '@/components/ui/duo-card'
 import { DuoButton } from '@/components/ui/duo-button'
 
-export default function KitchenPage() {
+function KitchenPageContent() {
   const { data: orders, isLoading, refetch } = useKitchenOrders()
   const updateStatus = useUpdateKitchenOrderStatus()
   const { token } = useAuthStore()
@@ -179,5 +180,13 @@ export default function KitchenPage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function KitchenPage() {
+  return (
+    <RouteGuard requiredRoles={['chef', 'manager', 'admin']}>
+      <KitchenPageContent />
+    </RouteGuard>
   )
 }
