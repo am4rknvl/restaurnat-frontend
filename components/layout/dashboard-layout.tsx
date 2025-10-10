@@ -5,6 +5,7 @@ import { useRole } from '@/lib/auth/use-role'
 import { getRoleDisplay } from '@/lib/auth/roles'
 import { DuoButton } from '@/components/ui/duo-button'
 import { XPBadge } from '@/components/ui/xp-badge'
+import { StreakCounter } from '@/components/ui/streak-counter'
 import { RoleBasedNav } from './role-based-nav'
 import { useRouter } from 'next/navigation'
 
@@ -46,6 +47,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             </div>
 
             <div className="flex items-center gap-4">
+              <StreakCounter streak={5} />
               <XPBadge xp={0} level={1} />
               <DuoButton onClick={handleLogout} variant="error" size="sm">
                 Logout
