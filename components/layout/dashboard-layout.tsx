@@ -20,7 +20,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const roleDisplay = role ? getRoleDisplay(role) : null
 
-  const handleLogout = () => {
+  const handleLogout = (): void => {
     logout()
     router.push('/login')
   }
