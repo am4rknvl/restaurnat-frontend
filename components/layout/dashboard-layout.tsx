@@ -36,7 +36,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               <div>
                 <h1 className="text-xl font-extrabold text-duo-darkGray">Restaurant OS</h1>
                 <p className="text-sm text-gray-600">
-                  Welcome back, {user?.name || 'User'}!
+                  Welcome back, {user?.name || 'User'}! 👋
                 </p>
               </div>
               {roleDisplay && (
