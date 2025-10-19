@@ -2,12 +2,13 @@
 
 import { useMenuItems, useMenuCategories, useUpdateMenuItemAvailability } from '@/lib/hooks/use-menu'
 import { useState } from 'react'
+import { RouteGuard } from '@/lib/auth/route-guard'
 import { motion } from 'framer-motion'
 import { DuoCard } from '@/components/ui/duo-card'
 import { DuoButton } from '@/components/ui/duo-button'
 import Link from 'next/link'
 
-export default function MenuPage() {
+function MenuPageContent() {
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const { data: categories } = useMenuCategories()
   const { data: items, isLoading } = useMenuItems({ 
@@ -162,5 +163,13 @@ export default function MenuPage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function MenuPage() {
+  return (
+    <RouteGuard requiredRoles={['manager', 'admin']}>
+      <MenuPageContent />
+    </RouteGuard>
   )
 }

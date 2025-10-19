@@ -2,11 +2,12 @@
 
 import { useStaffAssignments } from '@/lib/hooks/use-staff'
 import { useTables } from '@/lib/hooks/use-tables'
+import { RouteGuard } from '@/lib/auth/route-guard'
 import { motion } from 'framer-motion'
 import { DuoCard } from '@/components/ui/duo-card'
 import { DuoButton } from '@/components/ui/duo-button'
 
-export default function StaffPage() {
+function StaffPageContent() {
   const { data: assignments, isLoading: assignmentsLoading } = useStaffAssignments()
   const { data: tables, isLoading: tablesLoading } = useTables()
 
@@ -108,5 +109,13 @@ export default function StaffPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function StaffPage() {
+  return (
+    <RouteGuard requiredRoles={['waiter', 'chef', 'host', 'cashier', 'manager', 'admin']}>
+      <StaffPageContent />
+    </RouteGuard>
   )
 }

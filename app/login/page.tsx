@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/lib/stores/auth-store'
+import { getDefaultDashboard } from '@/lib/auth/roles'
 import { motion } from 'framer-motion'
 import { DuoButton } from '@/components/ui/duo-button'
 import { DuoInput } from '@/components/ui/duo-input'
@@ -19,7 +20,14 @@ export default function LoginPage() {
     clearError()
     try {
       await signin(identifier, password)
-      router.push('/dashboard')
+      
+      // Get the current user from store after signin
+      const currentUser = useAuthStore.getState().user
+      const userRole = currentUser?.role as any
+      
+      // Redirect based on role
+      const redirectPath = getDefaultDashboard(userRole)
+      router.push(redirectPath)
     } catch (err) {
       // Error handled by store
     }
