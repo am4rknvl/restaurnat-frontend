@@ -142,7 +142,7 @@ export default function QRMenuPage() {
         )}
       </div>
 
-      {/* Cart Footer */}
+
       {cart.length > 0 && (
         <div className="fixed bottom-0 left-0 right-0 bg-white shadow-duo p-4">
           <div className="max-w-4xl mx-auto">
