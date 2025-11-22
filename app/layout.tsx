@@ -1,50 +1,31 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { GeistSans } from "geist/font/sans"
-import { GeistMono } from "geist/font/mono"
-import { Analytics } from "@vercel/analytics/next"
-import { Suspense } from "react"
-import { AnimatePresence } from "framer-motion"
-import { PageTransition } from "@/components/page-transition"
-import { AuthProvider } from "@/hooks/use-auth"
-import { ErrorBoundary } from "@/components/error-boundary"
-import { Toaster } from "@/components/ui/toaster"
-import "./globals.css"
+import type { Metadata } from 'next'
+import { Nunito } from 'next/font/google'
+import './globals.css'
+import { Providers } from './providers'
+
+
+const nunito = Nunito({ 
+  subsets: ['latin'],
+  weight: ['400', '600', '700', '800'],
+  variable: '--font-nunito',
+})
 
 export const metadata: Metadata = {
-  title: "RestaurantOS - Run Your Restaurant Smarter",
-  description: "Modern restaurant management platform for reservations, orders, staff, and analytics",
-  generator: "v0.app",
+  title: 'Restaurant OS - Order, Earn, Enjoy! 🍽️',
+  description: 'Gamified restaurant ordering platform',
 }
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
-    <html lang="en" className="dark">
-      <head>
-        <style>{`
-html {
-  font-family: ${GeistSans.style.fontFamily};
-  --font-sans: ${GeistSans.variable};
-  --font-mono: ${GeistMono.variable};
-}
-        `}</style>
-      </head>
-      <body>
-        <ErrorBoundary>
-          <AuthProvider>
-            <Suspense fallback={null}>
-              <AnimatePresence mode="wait">
-                <PageTransition>{children}</PageTransition>
-              </AnimatePresence>
-            </Suspense>
-            <Toaster />
-          </AuthProvider>
-        </ErrorBoundary>
-        <Analytics />
+    <html lang="en">
+      <body className={`${nunito.variable} font-sans antialiased`}>
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   )
